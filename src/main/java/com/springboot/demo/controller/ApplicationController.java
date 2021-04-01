@@ -39,18 +39,34 @@ public class ApplicationController {
 	
 	@PostMapping(path = "/addEmployee")
 	public Employee addEmployee(@Validated @RequestBody Employee employee) {
-		return employeeDao.saveEmployee(employee);
+		Employee tempEmployee = employeeDao.saveEmployee(employee);
+		tempEmployee.setStatus("Failed to add Employee details");
+		return tempEmployee;
 	}
 	
 	@PostMapping(path = "/updateEmployee")
 	public ResponseEntity<Employee> updateEmployee(@Validated @RequestBody Employee employee) {
-		if(employee == null) {
+		Optional<Employee> employeeExists = employeeDao.getEmployeeDetails(employee.getEmployeeID());
+		if(employeeExists == null) {
 			return ResponseEntity.notFound().build();
 		}
 		else {
-			Employee tempEmployee = employeeDao.saveEmployee(employee);
+			Employee tempEmployee = employeeDao.updateEmployee(employee);
+			tempEmployee.setStatus("Employee Details updated successfully");
 			return ResponseEntity.ok().body(tempEmployee);
 		}
 	}
 	
+	@PostMapping(path = "/deleteEmployee")
+	public ResponseEntity<Employee> deleteEmployee(@Validated @RequestBody Employee employee) {
+		Optional<Employee> employeeExists = employeeDao.getEmployeeDetails(employee.getEmployeeID());
+		if(employeeExists == null) {
+			return ResponseEntity.notFound().build();
+		}
+		else {
+			Employee tempEmployee = employeeDao.updateEmployee(employee);
+			tempEmployee.setStatus("Employee Details updated successfully");
+			return ResponseEntity.ok().body(tempEmployee);
+		}
+	}
 }

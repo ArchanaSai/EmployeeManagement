@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,38 +17,41 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class Employee {
 	@Id
-	@Column(name = "DMS_EMPLOYEE_ID")
+	@Column(name = "DMS_EMPLOYEE_ID",updatable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long employeeID;
 	
-	@Column(name = "EMPLOYEE_NAME",nullable = false)
+	@Column(name = "EMPLOYEE_NAME",nullable = false,updatable = true)
 	private String employeeName;
 	
-	@Column(name = "EMPLOYEE_CODE",nullable = false)
+	@Column(name = "EMPLOYEE_CODE",nullable = false,updatable = false)
 	private String employeeCode;
 	
-	@Column(name = "JOINING_DATE",nullable = false)
+	@Column(name = "JOINING_DATE",nullable = false,updatable = true)
 	@DateTimeFormat (pattern = "YYYY-MM-DD")
 	private Date joiningDate;
 	
-	@Column(name = "CURRENT_DESIGNATION",nullable = false)
+	@Column(name = "CURRENT_DESIGNATION",nullable = false,updatable = true)
 	private String currentDesignation;
 	
-	@Column(name = "ACTIVE")
+	@Column(name = "ACTIVE",updatable = true)
 	private char active;
 	
-	@Column(name = "CREATED_BY")
+	@Column(name = "CREATED_BY",updatable = false)
 	private String createdBy;
 	
-	@Column(name = "CREATED_DATE")
+	@Column(name = "CREATED_DATE",updatable = false)
 	private Date createdDate;
 	
-	@Column(name = "UPDATED_BY")
+	@Column(name = "UPDATED_BY",updatable = true)
 	private String updatedBy;
 	
-	@Column(name = "UPDATED_DATE")
-	private String updatedDate;
-
+	@Column(name = "UPDATED_DATE",updatable = true)
+	private Date updatedDate;
+	
+	@Transient
+	private String status;
+	
 	public long getEmployeeID() {
 		return employeeID;
 	}
@@ -120,12 +124,20 @@ public class Employee {
 		this.updatedBy = updatedBy;
 	}
 
-	public String getUpdatedDate() {
+	public Date getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(String updatedDate) {
+	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }
